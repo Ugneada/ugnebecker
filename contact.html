@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Static Template</title>
+    <style>
+      html body {
+        height: 70vw;
+        perspective: 2000px;
+        justify-content: center;
+        font-size: 16px;
+        margin: 0;
+      }
+
+      /*MEDIA QUERIES*/
+      /*Mobile*/
+      @media only screen and (min-width: 320px) and (max-width: 480px),
+        (orientation: portrait) {
+        #grid {
+          display: inline-block;
+        }
+      }
+
+      /*LINKS*/
+      a {
+        color: #000000;
+        text-decoration: none;
+      }
+      a:hover,
+      a:active,
+      a:focus {
+        color: rgb(116, 116, 116);
+      }
+
+      /*GRID*/
+      .grid-container {
+        display: grid;
+        justify-content: center;
+        grid-template-columns: 500px 500px 500px;
+        grid-template-rows: auto;
+        padding: 50px;
+        grid-gap: 50px 50px;
+        grid-template-areas:
+          "header header header"
+          "main main main";
+      }
+      .grid-container > div {
+        padding: 50px;
+        text-align: center;
+      }
+      .item1 .item2 .item3 {
+        grid-area: header;
+        grid-auto-flow: row;
+      }
+      .item4 {
+        grid-area: main;
+        grid-column: 1;
+        justify-self: center;
+      }
+      .item5 {
+        grid-area: main;
+        grid-column: 2;
+        justify-self: center;
+      }
+      .item6 {
+        grid-area: main;
+        grid-column: 3;
+        justify-self: center;
+      }
+
+      /*TRANSFORM*/
+      img {
+        transform-origin: 50% 50%;
+        transition: transform 0.6s cubic-bezier(0.8, 0.5, 0.48, 0.9);
+        position: relative;
+      }
+      .fade-in {
+        transform: translatex(0px) rotateX(0deg) rotateY(0deg) !important;
+      }
+
+      #cursor {
+        position: absolute;
+        transition: 0.1s;
+        pointer-events: none;
+        font-size: medium;
+      }
+      #text1 {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="grid" class="grid-container">
+      <div id="about" class="item1">
+        <a href="../about.html">About</a>
+      </div>
+      <div id="contact" class="item2">
+        <a href="../contact.html">Contact</a>
+      </div>
+      <div id="work" class="item3">
+        <a href="../index.html">Work</a>
+      </div>
+      <div class="item4">
+        <img id="img1" src="https://i.imgur.com/KL6v9eYl.png" width="500px" />
+      </div>
+      <div class="item5">
+        <img id="img2" src="https://i.imgur.com/h7GgwcIl.png" width="500px" />
+      </div>
+      <div class="item6">
+        <img id="img3" src="https://i.imgur.com/6unTXZil.png" width="500px" />
+      </div>
+    </div>
+    <div id="cursor"></div>
+  </body>
+</html>
+<script>
+  //use window.scrollY
+  var scrollpos = 0;
+  var img1 = document.getElementById("img1");
+  var img2 = document.getElementById("img2");
+  var img3 = document.getElementById("img3");
+
+  function randomRangeInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  function setRandomDistortion(image) {
+    var randomTranslate = randomRangeInt(-100, 100);
+    var randomRotateX = randomRangeInt(-100, 100);
+    var randomRotateY = randomRangeInt(-100, 100);
+
+    image.style.transform =
+      "translateX(" +
+      randomTranslate +
+      "px) rotateX(" +
+      randomRotateX +
+      "deg) rotateY(" +
+      randomRotateY +
+      "deg)";
+  }
+  setRandomDistortion(img1);
+  setRandomDistortion(img2);
+  setRandomDistortion(img3);
+
+  let cursor = document.getElementById("cursor");
+  window.addEventListener("scroll", function () {
+    scrollpos = window.scrollY;
+    console.log(scrollpos);
+    let scroll = this.scrollY;
+    console.log(scroll);
+
+    if (scrollpos > 100) {
+      img1.classList.add("fade-in");
+    } else {
+      img1.classList.remove("fade-in");
+    }
+
+    if (scrollpos > 100) {
+      img2.classList.add("fade-in");
+    } else {
+      img2.classList.remove("fade-in");
+    }
+
+    if (scrollpos > 100) {
+      img3.classList.add("fade-in");
+    } else {
+      img3.classList.remove("fade-in");
+    }
+  });
+
+  /*mouseover.PARAGRAPH*/
+  let text1 = document.getElementById("text1");
+
+  document.addEventListener("mousemove", function (e) {
+    let x = e.pageX;
+    let y = e.pageY;
+    cursor.style.left = x + "px";
+    cursor.style.top = y + "px";
+  });
+
+  img1.addEventListener("mouseover", function (e) {
+    document.getElementById("cursor").innerHTML = text1.innerHTML;
+  });
+
+  img1.addEventListener("mouseleave", function (e) {
+    document.getElementById("cursor").innerHTML = "";
+  });
+
+  /*mouseover.HEADER*/
+  let about = document.getElementById("about");
+  let contact = document.getElementById("contact");
+  let work = document.getElementById("work");
+
+  about.addEventListener("mouseover", function (e) {
+    document.getElementById("cursor").innerHTML = "more about me";
+  });
+
+  about.addEventListener("mouseleave", function (e) {
+    document.getElementById("cursor").innerHTML = "";
+  });
+
+  contact.addEventListener("mouseover", function (e) {
+    document.getElementById("cursor").innerHTML = "reach me out";
+  });
+
+  contact.addEventListener("mouseleave", function (e) {
+    document.getElementById("cursor").innerHTML = "";
+  });
+
+  work.addEventListener("mouseover", function (e) {
+    document.getElementById("cursor").innerHTML = "see my work";
+  });
+
+  work.addEventListener("mouseleave", function (e) {
+    document.getElementById("cursor").innerHTML = "";
+  });
+</script>
